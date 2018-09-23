@@ -1,13 +1,15 @@
-Squid.Spec = function(description) {
-  this.description = description
+Squid.Spec = class {
+  constructor(description) {
+    this.description = description
+  }
 
-  this.it = function(description, code) {
-    var result = code()
+  it(description, code) {
+    const result = code()
     result.nameSpace = this.description
     result.description = description
     Squid.results.push(result)
-    
-    if (!result.success) result.log()
+
+    if (!result.isSuccess) result.log()
     return this
   }
 }

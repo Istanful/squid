@@ -1,11 +1,13 @@
-Squid.Expectation = function(subject) {
-  this.subject = subject
+Squid.Expectation = class {
+  constructor(subject) {
+    this.subject = subject
+  }
 
-  this.to = function(predicate, result) {
+  to(predicate, result) {
     return predicate(this.subject, result).compare(true)
   }
 
-  this.toNot = function(predicate, result) {
+  toNot(predicate, result) {
     return predicate(this.subject, result).compare(false)
   }
 }

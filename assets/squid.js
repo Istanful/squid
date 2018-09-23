@@ -1,3 +1,3 @@
-var Squid = function() {}
+class Squid {}
 
 Squid.results = []
