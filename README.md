@@ -54,17 +54,16 @@ Behind the scenes a predicate is just a function that returns a `Squid.Result`
 object. Here is the implementation for `eql`:
 
 ```javascript
-var eql = function(subject, result) {
+var eql = function(expected, actual) {
   return new Squid.Predicate(
-    function(subject, result) { return subject === result },
-    function(success, subject, result) {
+    function(expected, actual) { return expected === actual },
+    function(isSuccess, expected, actual) {
       var message
-      if (success) { message = subject + " equals " + result }
-      else { message = "Expected " + subject + " to equal " + result }
-      return message
+      if (isSuccess) { return expected + " equals " + actual }
+      else { return "Expected " + expected + " to equal " + actual }
     },
-    subject,
-    result
+    expected,
+    actual
   )
 }
 ```

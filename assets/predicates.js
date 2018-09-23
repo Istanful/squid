@@ -1,47 +1,46 @@
-Squid.Predicate = function(compareFunc, messageFunc, subject, result) {
-  this.subject = subject
-  this.result = result
+Squid.Predicate = function(compareFunc, messageFunc, expected, actual) {
+  this.expected = expected
+  this.actual = actual
   this.compareFunc = compareFunc
   this.messageFunc = messageFunc
 
   this.compare = function(trueValue) {
-    var success = this.compareFunc(this.subject, this.result) === trueValue
-    var message = this.messageFunc(success, this.subject, this.result)
-    return new Squid.Result(success, message)
+    var isSuccess = this.compareFunc(this.expected, this.actual) === trueValue
+    var message = this.messageFunc(isSuccess, this.expected, this.actual)
+    return new Squid.Result(isSuccess, message)
   }
 }
 
-var eql = function(subject, result) {
+var eql = function(expected, actual) {
   return new Squid.Predicate(
-    function(subject, result) { return subject === result },
-    function(success, subject, result) {
+    function(expected, actual) { return expected === actual },
+    function(isSuccess, expected, actual) {
       var message
-      if (success) { message = subject + " equals " + result }
-      else { message = "Expected " + subject + " to equal " + result }
-      return message
+      if (isSuccess) { return expected + " equals " + actual }
+      else { return "Expected " + expected + " to equal " + actual }
     },
-    subject,
-    result
+    expected,
+    actual
   )
 }
 
-var include = function(subject, result) {
+var include = function(expected, actual) {
   return new Squid.Predicate(
-    function(subject, result) {
-      if (typeof subject === "string") {
-        for (var i = 0; i < subject.length; i++)
-          if (subject[i] === result) return true;
+    function(expected, actual) {
+      if (typeof expected === "string") {
+        for (var i = 0; i < expected.length; i++)
+          if (expected[i] === actual) return true;
         return false
       }
-      return subject.hasOwnProperty(result)
+      return expected.hasOwnProperty(actual)
     },
-    function(success, subject, result) {
+    function(isSuccess, expected, actual) {
       var message
-      if (success) { message = subject + " includes " + result }
-      else { message = "Expected " + subject + " to include " + result }
+      if (isSuccess) { message = expected + " includes " + actual }
+      else { message = "Expected " + expected + " to include " + actual }
       return message
     },
-    subject,
-    result
+    expected,
+    actual
   )
 }
